@@ -8,25 +8,32 @@ except:
 from binance.websockets import BinanceSocketManager
 from binance.enums import *
 from binance.exceptions import BinanceAPIException, BinanceWithdrawException
+import os
 
+orders = []
 def process_message(msg):
     # print("message type: {}".format(msg['e']))
-    global last_order
-    print(msg['p'])
+    # global orders,buy_price,sell_price
+    os.system('clear')
+    print('Trading:',coin)
+    print('Quantity:',quantity)
+    print('Buying price:',buy_price)
+    print('Selling price:',sell_price)
+    print('Current price: ',msg['p'])
+    for i in orders:print(i)
+
     if msg['p'] <= buy_price :
         try:
             order = client.order_limit_buy(symbol=coin,quantity=quantity,price=msg['p'])
-            print('Bought {1} coins at {0} price'.format(msg['p'],quantity))
-            last_order = 'buy'
-        except BinanceAPIException as e:
+            orders.append('Bought {1} coins at {0} price'.format(msg['p'],quantity))
+        except:
             # print(e.message)
             pass
     elif msg['p'] >= sell_price:
         try:
             order = client.order_limit_sell(symbol=coin,quantity=quantity,price=msg['p'])
-            print('Sold {1} coins at {0} price'.format(msg['p'],quantity))
-            last_order = 'sell'
-        except BinanceAPIException as e:
+            orders.append('Sold {1} coins at {0} price'.format(msg['p'],quantity))
+        except:
             # print(e.message)
             pass
 def average_price(prices):
@@ -44,7 +51,7 @@ buy_price = input('Enter your buying price: ')
 sell_price = input('Enter your selling price: ')
 quantity = input('Enter quantity: ')
 
-profit=(((int(sell_price)-int(buy_price))/int(buy_price))*100)
+profit=(((float(sell_price)-float(buy_price))/float(buy_price))*100)
 if profit<=0.2:
     choice = input('Do you want to continue as profit is less than 0.2%')
     if choice == "no":
