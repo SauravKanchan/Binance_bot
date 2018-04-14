@@ -7,7 +7,7 @@ except:
     sys.exit()
 from binance.websockets import BinanceSocketManager
 from binance.enums import *
-
+from binance.exceptions import BinanceAPIException, BinanceWithdrawException
 
 def process_message(msg):
     # print("message type: {}".format(msg['e']))
@@ -19,14 +19,16 @@ def process_message(msg):
             print('Bought {1} coins at {0} price'.format(msg['p'],quantity))
             last_order = 'buy'
         except BinanceAPIException as e:
-            print(e.message)
+            # print(e.message)
+            pass
     elif msg['p'] >= sell_price:
         try:
             order = client.order_limit_sell(symbol=coin,quantity=quantity,price=msg['p'])
             print('Sold {1} coins at {0} price'.format(msg['p'],quantity))
             last_order = 'sell'
         except BinanceAPIException as e:
-            print(e.message)
+            # print(e.message)
+            pass
 def average_price(prices):
     total = 0
     for i in prices:total+=float(i['p'])
