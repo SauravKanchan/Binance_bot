@@ -37,7 +37,13 @@ last_order = input('What was your last order buy/sell: ')
 buy_price = input('Enter your buying price: ')
 sell_price = input('Enter your selling price: ')
 quantity = input('Enter quantity: ')
-print("Profit margin: ",(((int(sell_price)-int(buy_price))/int(buy_price))*100),"%")
+
+profit=(((int(sell_price)-int(buy_price))/int(buy_price))*100)
+if profit<=0.2:
+    choice = input('Do you want to continue as profit is less than 0.2%')
+    if choice == "no":
+        sys.exit()
+print("Profit margin: ",profit,"%")
 
 bm = BinanceSocketManager(client)
 bm.start_aggtrade_socket(coin, process_message)
