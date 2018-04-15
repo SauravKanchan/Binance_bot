@@ -21,3 +21,5 @@ api_secret = ''
 ```terminal
 python main.py
 ```
+#### Disclaimer
+_I am not responsible for anything done with this bot. Use it at your own risk._
