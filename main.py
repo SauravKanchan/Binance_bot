@@ -23,27 +23,30 @@ def process_message(msg):
     print('Buying price:',buy_price)
     print('Selling price:',sell_price)
     print('Profit percentage:',profit)
-    print('Current price: ',msg['p'])
+    print('Current price: ',msg['b'])
+    print('Weighted Average price:', msg['w'])
+    print('High price:', msg['h'])
+    print('Low price:', msg['l'])
     print('Quantity',quantity)
     print('last_error_message:',last_error_message)
     print('\nOrders placed:-')
     for i in orders:print(i)
 
-    if msg['p'] <= buy_price :
+    if msg['b'] <= buy_price :
         try:
-            quantity = float(client.get_asset_balance(asset=sell)['free'])*fraction/float(msg['p'])
+            quantity = float(client.get_asset_balance(asset=sell)['free'])*fraction/float(msg['b'])
             quantity = floor(quantity*(10**decimals))/10**decimals
-            order = client.order_limit_buy(symbol=coin,quantity=quantity,price=msg['p'])
-            orders.append('Bought {1} coins at {0} price'.format(msg['p'],quantity))
+            order = client.order_limit_buy(symbol=coin,quantity=quantity,price=msg['b'])
+            orders.append('Bought {1} coins at {0} price'.format(msg['b'],quantity))
         except Exception  as e:
             # print(e.message)
             last_error_message = e
-    elif msg['p'] >= sell_price:
+    elif msg['b'] >= sell_price:
         try:
             quantity = float(client.get_asset_balance(asset=buy)['free'])*fraction
             quantity = floor(quantity*(10**decimals))/10**decimals
-            order = client.order_limit_sell(symbol=coin,quantity=quantity,price=msg['p'])
-            orders.append('Sold {1} coins at {0} price'.format(msg['p'],quantity))
+            order = client.order_limit_sell(symbol=coin,quantity=quantity,price=msg['b'])
+            orders.append('Sold {1} coins at {0} price'.format(msg['b'],quantity))
         except Exception  as e:
             # print(e.message)
             last_error_message = e
@@ -90,5 +93,5 @@ decimals = float(input('Decimals to round(Ex:- 2)'))
 print("Profit margin: ",profit,"%")
 
 bm = BinanceSocketManager(client)
-bm.start_aggtrade_socket(coin, process_message)
+bm.start_symbol_ticker_socket(coin, process_message)
 bm.start()
