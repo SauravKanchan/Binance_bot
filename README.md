@@ -21,5 +21,7 @@ api_secret = ''
 ```terminal
 python main.py
 ```
+![Screenshot of running bot](screenshot/bot.png)
+
 #### Disclaimer
 _I am not responsible for anything done with this bot. Use it at your own risk._
